@@ -7,12 +7,14 @@ import com.amit.blogapp.repositories.UserRepository;
 import com.amit.blogapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServiceImpl  implements UserService {
     // field injection is ont recommended
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository){
@@ -60,6 +62,7 @@ public class UserServiceImpl  implements UserService {
         System.out.println(user.getId());
         return userToDto(user);
     }
+
     // update a user
     @Override
     public UserDto updateUser(UserDto userDto, Long id) {
@@ -70,7 +73,8 @@ public class UserServiceImpl  implements UserService {
        user.setUsername(userDto.getUsername());
        user.setPassword(userDto.getPassword());
        user.setId(userDto.getId());
-       return userDto;
+       User updatedUser = this.userRepository.save(user);
+       return userToDto(updatedUser);
     }
 
     // delete a user
@@ -83,9 +87,9 @@ public class UserServiceImpl  implements UserService {
     @Override
     public List<UserDto> getAllUser() {
         List<User> userList = userRepository.findAll();
-        List<UserDto> userDtoList = null;
+        List<UserDto> userDtoList = new ArrayList<>();
         for(User user : userList){
-            UserDto userDto = null;
+            UserDto userDto = new UserDto();
             userDto.setAbout(user.getAbout());
             userDto.setEmail(user.getEmail());
             userDto.setName(user.getName());

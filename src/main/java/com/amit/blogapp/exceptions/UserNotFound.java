@@ -16,7 +16,7 @@ public class UserNotFound extends RuntimeException {
     }
 
    public UserNotFound(String resource, String fieldName, Long id){
-        super(String.format("%s not found with %s :%l",resource,fieldName,id));
+        super(String.format("%s not found with %s :%d",resource,fieldName,id));
         this.resource = resource;
         this.fieldName = fieldName;
         this.id = id;
